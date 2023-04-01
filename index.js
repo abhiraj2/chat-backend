@@ -22,7 +22,7 @@ app.use(cors());
 //     this.msg = msg;
 //     this.ack = false;
 // }
-console.log(mongouri)
+//console.log(mongouri)
 
 function Room(roomid){
     this.roomid = roomid;
@@ -155,4 +155,6 @@ async function main(){
 }
 
 main()
-server.listen(8000);
+server.listen(process.env.port || 3000, ()=>{
+    console.log("App Started")
+});
