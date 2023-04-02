@@ -158,6 +158,6 @@ async function main(){
 
 main()
 
-server.listen(process.env.port || 3000, '0.0.0.0' , ()=>{
+server.listen(process.env.port || 3000 , ()=>{
     console.log("App Started")
 });
