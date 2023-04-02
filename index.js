@@ -103,7 +103,7 @@ async function main(){
         })
         socket.on("join", async (roomid, user)=>{
             let r = await db.collection(dbCol).findOne({ roomid: roomid })
-            console.log(r) 
+            //console.log(r) 
             if(r && !r.members.find(ele=>ele==user.username)){
                 console.log("Can Join.")
                 console.log(`${user.username}`)
@@ -127,6 +127,7 @@ async function main(){
             console.log("Create", roomid);
             if(await db.collection(dbCol).findOne({roomid: roomid})){
                 console.log("Dup.");
+                socket.emit("roomExists");
             }
             else{
                 let tempObj = new Room(roomid)
@@ -138,9 +139,9 @@ async function main(){
         })
 
         socket.on("sendMsg", async (msg)=>{
-            console.log(msg)
+            //console.log(msg)
             let r = await db.collection(dbCol).findOne({roomid: msg.roomid})
-            console.log(r)
+            //console.log(r)
             pmessages = r.msgs.slice();
             pmessages.push(msg);
             pmessages.sort((a,b)=>a.timestamp-b.timestamp)
@@ -148,6 +149,7 @@ async function main(){
             const setQ = {$set:{msgs: pmessages.slice()}}
             db.collection(dbCol).updateOne(findQ, setQ)
                 .then(()=>console.log("DB updated"))
+            socket.emit("received")
             io.to(msg.roomid).emit("newMsg");
         })
         
@@ -155,6 +157,7 @@ async function main(){
 }
 
 main()
-server.listen(process.env.port || 3000, ()=>{
+
+server.listen(8000, '0.0.0.0' , ()=>{
     console.log("App Started")
 });
