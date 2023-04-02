@@ -115,7 +115,7 @@ async function main(){
                 const updateQ = { $set: {members: prevM.slice()}}
                 await db.collection(dbCol).updateOne(searchQ, updateQ)
                 socket.join(roomid);
-                socket.emit("joined", roomid);
+                socket.emit("joined", roomid, user.username);
                 io.to(roomid).emit("newUser")
             }
             else{
