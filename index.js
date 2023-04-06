@@ -97,7 +97,9 @@ async function main(){
                 io.to(l_roomid).emit('userLeft')
                 if(prevM.length == 0){
                     console.log("empty room")
-                    db.collection(dbCol).deleteOne({roomid: l_roomid}).then(()=>{console.log("Deleted Room")});
+                    setTimeout(()=>{
+                        db.collection(dbCol).deleteOne({roomid: l_roomid}).then(()=>{console.log("Deleted Room")});
+                    }, 180000)
                 }
             }
         })
