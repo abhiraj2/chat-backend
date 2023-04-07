@@ -107,8 +107,8 @@ async function main(){
             let r = await db.collection(dbCol).findOne({ roomid: roomid })
             //console.log(r) 
             if(r && !r.members.find(ele=>ele==user.username)){
-                console.log("Can Join.")
-                console.log(`${user.username}`)
+                //console.log("Can Join.")
+                //console.log(`${user.username}`)
                 l_username = user.username
                 l_roomid = roomid
                 const searchQ = {roomid : roomid};
@@ -154,7 +154,18 @@ async function main(){
             socket.emit("received")
             io.to(msg.roomid).emit("newMsg");
         })
-        socket.on("userLeftRoom", (roomid)=>{
+        socket.on("userLeftRoom", async (roomid)=>{
+            console.log("user left room")
+            socket.leave(roomid)
+            l_roomid = ''
+            l_username = ''
+            let r = await db.collection(dbCol).findOne({roomid: msg.roomid});
+            let pUsers = r.members;
+            pUsers = pUsers.filter((ele)=>ele != l_username)
+            const searchQ = {roomid: l_roomid};
+            const updateQ = {$set:{members: prevM.slice()}};
+            await db.collection(dbCol).updateOne(searchQ, updateQ)
+                .then(()=>console.log("Deleted User"))
             io.to(roomid).emit("userLeft")
         })
     })
