@@ -164,6 +164,7 @@ async function main(){
             pUsers = pUsers.filter((ele)=>ele != l_username)
             const searchQ = {roomid: l_roomid};
             const updateQ = {$set:{members: pUsers.slice()}};
+            console.log(pUsers);
             await db.collection(dbCol).updateOne(searchQ, updateQ)
                 .then(()=>console.log("Deleted User"))
             io.to(roomid).emit("userLeft")
