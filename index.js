@@ -159,7 +159,7 @@ async function main(){
             socket.leave(roomid)
             l_roomid = ''
             l_username = ''
-            let r = await db.collection(dbCol).findOne({roomid: msg.roomid});
+            let r = await db.collection(dbCol).findOne({roomid: roomid});
             let pUsers = r.members;
             pUsers = pUsers.filter((ele)=>ele != l_username)
             const searchQ = {roomid: l_roomid};
