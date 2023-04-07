@@ -162,7 +162,7 @@ async function main(){
             let r = await db.collection(dbCol).findOne({roomid: roomid});
             let pUsers = r.members;
             pUsers = pUsers.filter((ele)=>ele != username)
-            const searchQ = {roomid: l_roomid};
+            const searchQ = {roomid: roomid};
             const updateQ = {$set:{members: pUsers.slice()}};
             console.log(pUsers);
             await db.collection(dbCol).updateOne(searchQ, updateQ)
