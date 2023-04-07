@@ -154,14 +154,14 @@ async function main(){
             socket.emit("received")
             io.to(msg.roomid).emit("newMsg");
         })
-        socket.on("userLeftRoom", async (roomid)=>{
+        socket.on("userLeftRoom", async (roomid, username)=>{
             console.log("user left room")
             socket.leave(roomid)
             l_roomid = ''
             l_username = ''
             let r = await db.collection(dbCol).findOne({roomid: roomid});
             let pUsers = r.members;
-            pUsers = pUsers.filter((ele)=>ele != l_username)
+            pUsers = pUsers.filter((ele)=>ele != username)
             const searchQ = {roomid: l_roomid};
             const updateQ = {$set:{members: pUsers.slice()}};
             console.log(pUsers);
