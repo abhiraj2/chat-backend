@@ -154,7 +154,9 @@ async function main(){
             socket.emit("received")
             io.to(msg.roomid).emit("newMsg");
         })
-        
+        socket.on("userLeftRoom", (roomid)=>{
+            io.to(roomid).emit("userLeft")
+        })
     })
 }
 
